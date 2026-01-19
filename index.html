@@ -3,589 +3,480 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Server Status - Anh Em Say Gex</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Minecraft Server Status</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0f;
+            background-color: #0a0a0a;
             color: #f0f0f0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
+            overflow: hidden;
             position: relative;
         }
 
-        .background-effects {
+        body::before {
+            content: '';
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            background: radial-gradient(circle at 20% 30%, rgba(30, 30, 60, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(60, 30, 60, 0.2) 0%, transparent 50%);
             z-index: -1;
         }
 
-        .particle {
-            position: absolute;
-            background-color: rgba(46, 204, 113, 0.1);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-                opacity: 0.2;
-            }
-            25% {
-                transform: translateY(-100px) translateX(100px) rotate(90deg);
-                opacity: 0.5;
-            }
-            50% {
-                transform: translateY(-200px) translateX(0) rotate(180deg);
-                opacity: 0.2;
-            }
-            75% {
-                transform: translateY(-100px) translateX(-100px) rotate(270deg);
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(0) translateX(0) rotate(360deg);
-                opacity: 0.2;
-            }
-        }
-
         .container {
-            width: 90%;
+            width: 100%;
             max-width: 800px;
-            padding: 40px 20px;
-            z-index: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 50px;
+            width: 100%;
         }
 
         .title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #2ecc71, #3498db, #9b59b6);
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #4a9eff 0%, #00d4ff 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 30px rgba(52, 152, 219, 0.3);
+            margin-bottom: 0.5rem;
             letter-spacing: 1px;
+            text-shadow: 0 5px 15px rgba(74, 158, 255, 0.2);
+            animation: titleGlow 3s ease-in-out infinite alternate;
         }
 
         .subtitle {
             font-size: 1.2rem;
-            color: #a0a0c0;
+            color: #aaa;
             font-weight: 300;
-            letter-spacing: 2px;
-        }
-
-        .server-card {
-            background: rgba(20, 20, 30, 0.8);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .server-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-        }
-
-        .server-name {
-            font-size: 2.2rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #ffffff;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .server-icon {
-            font-size: 2rem;
-            color: #2ecc71;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
 
         .status-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 25px;
+            gap: 2rem;
+            width: 100%;
+            background: rgba(20, 20, 30, 0.7);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 100, 150, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s ease;
+        }
+
+        .status-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .status-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #4a9eff, transparent);
+            animation: slide 3s infinite;
+        }
+
+        .server-name {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(100, 100, 150, 0.3);
+            width: 100%;
+        }
+
+        .status-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
         }
 
         .status-indicator {
             display: flex;
             align-items: center;
-            gap: 20px;
-            padding: 25px 40px;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 500px;
-            background: rgba(30, 30, 40, 0.7);
-            position: relative;
+            gap: 1.5rem;
         }
 
         .status-dot {
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             position: relative;
-            box-shadow: 0 0 15px currentColor;
-        }
-
-        .status-dot::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0.7;
-            }
-            70% {
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0;
-            }
+            box-shadow: 0 0 20px currentColor;
+            animation: pulse 2s infinite ease-in-out;
         }
 
         .status-text {
             font-size: 1.8rem;
             font-weight: 600;
-            flex-grow: 1;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            opacity: 0.5;
+            animation: ripple 2s infinite ease-in-out;
+        }
+
+        .status-desc {
+            font-size: 1.1rem;
+            color: #aaa;
             text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
         }
 
         .timestamp {
-            font-size: 1rem;
-            color: #8888aa;
+            font-size: 0.9rem;
+            color: #777;
             text-align: center;
-            margin-top: 10px;
-            font-weight: 300;
+            margin-top: 1rem;
         }
 
-        .loading {
-            font-size: 1.2rem;
-            color: #3498db;
-            text-align: center;
-            margin-top: 20px;
-            display: none;
+        .refresh-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 1rem;
         }
 
-        .loading-dots {
-            display: inline-block;
+        .refresh-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #4a9eff;
             position: relative;
-            width: 80px;
-            height: 20px;
         }
 
-        .loading-dots span {
+        .refresh-icon::after {
+            content: '';
             position: absolute;
+            top: -3px;
+            right: -3px;
             width: 10px;
             height: 10px;
-            border-radius: 50%;
-            background: #3498db;
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+            border-top: 2px solid #4a9eff;
+            border-right: 2px solid #4a9eff;
+            border-radius: 0 10px 0 0;
         }
 
-        .loading-dots span:nth-child(1) {
-            left: 8px;
-            animation: loading-dots1 0.6s infinite;
+        .background-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
         }
 
-        .loading-dots span:nth-child(2) {
-            left: 8px;
-            animation: loading-dots2 0.6s infinite;
+        .cube {
+            position: absolute;
+            background: rgba(74, 158, 255, 0.05);
+            border: 1px solid rgba(74, 158, 255, 0.1);
+            animation: float 15s infinite linear;
         }
 
-        .loading-dots span:nth-child(3) {
-            left: 32px;
-            animation: loading-dots2 0.6s infinite;
+        .cube:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 20s;
         }
 
-        .loading-dots span:nth-child(4) {
-            left: 56px;
-            animation: loading-dots3 0.6s infinite;
+        .cube:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 70%;
+            left: 80%;
+            animation-delay: -5s;
+            animation-duration: 25s;
         }
 
-        @keyframes loading-dots1 {
-            0% {
-                transform: scale(0);
-            }
-            100% {
-                transform: scale(1);
-            }
+        .cube:nth-child(3) {
+            width: 30px;
+            height: 30px;
+            top: 50%;
+            left: 20%;
+            animation-delay: -10s;
+            animation-duration: 15s;
         }
 
-        @keyframes loading-dots2 {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(24px, 0);
-            }
+        .cube:nth-child(4) {
+            width: 50px;
+            height: 50px;
+            top: 20%;
+            left: 85%;
+            animation-delay: -15s;
         }
 
-        @keyframes loading-dots3 {
-            0% {
-                transform: scale(1);
-            }
-            100% {
-                transform: scale(0);
-            }
+        /* Status Colors */
+        .status-online {
+            color: #00ff00;
         }
 
-        .refresh-btn {
-            background: linear-gradient(90deg, #2ecc71, #3498db);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            margin-top: 30px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        .status-offline {
+            color: #ff0000;
         }
 
-        .refresh-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.6);
+        .status-starting {
+            color: #ffff00;
         }
 
-        .refresh-btn:active {
-            transform: translateY(0);
+        .status-checking {
+            color: #0000ff;
         }
 
-        .refresh-btn i {
-            transition: transform 0.5s ease;
+        .status-error {
+            color: #800080;
         }
 
-        .refreshing i {
-            transform: rotate(360deg);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #666688;
-            font-size: 0.9rem;
-        }
-
-        .api-status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-        }
-
-        .api-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #2ecc71;
-            animation: api-pulse 2s infinite;
-        }
-
-        @keyframes api-pulse {
+        /* Animations */
+        @keyframes pulse {
             0%, 100% {
-                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 0 20px currentColor;
             }
             50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 30px currentColor;
+            }
+        }
+
+        @keyframes ripple {
+            0%, 100% {
+                transform: scale(1);
                 opacity: 0.5;
             }
+            50% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
         }
 
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 5px 15px rgba(74, 158, 255, 0.2);
+            }
+            100% {
+                text-shadow: 0 5px 25px rgba(74, 158, 255, 0.5), 0 0 40px rgba(74, 158, 255, 0.3);
+            }
+        }
+
+        @keyframes slide {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+            }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .title {
-                font-size: 2.5rem;
+            .container {
+                padding: 1rem;
             }
-            
-            .server-name {
-                font-size: 1.8rem;
-            }
-            
-            .status-text {
-                font-size: 1.5rem;
-            }
-            
-            .server-card {
-                padding: 30px 20px;
-            }
-        }
 
-        @media (max-width: 480px) {
             .title {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
-            
+
+            .status-container {
+                padding: 1.5rem;
+            }
+
             .server-name {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
-            
+
             .status-text {
-                font-size: 1.3rem;
-            }
-            
-            .status-indicator {
-                padding: 20px;
+                font-size: 1.4rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="background-effects" id="particles"></div>
-    
+    <div class="background-animation">
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+    </div>
+
     <div class="container">
         <div class="header">
-            <h1 class="title">MINECRAFT SERVER STATUS</h1>
-            <div class="subtitle">REAL-TIME MONITORING</div>
+            <h1 class="title">Anh Em Say Gex</h1>
+            <div class="subtitle">Minecraft Server Status</div>
         </div>
-        
-        <div class="server-card">
-            <div class="server-name">
-                <i class="fas fa-server server-icon"></i>
-                Anh Em Say Gex
-            </div>
+
+        <div class="status-container">
+            <div class="server-name">Minecraft Server Name</div>
             
-            <div class="status-container">
-                <div class="status-indicator" id="statusIndicator">
+            <div class="status-display">
+                <div class="status-indicator">
                     <div class="status-dot" id="statusDot"></div>
                     <div class="status-text" id="statusText">Checking</div>
                 </div>
                 
+                <div class="status-desc" id="statusDesc">
+                    Fetching server status information...
+                </div>
+                
                 <div class="timestamp" id="timestamp">
-                    Last updated: <span id="timeDisplay">--:--:--</span>
+                    Last updated: --
                 </div>
                 
-                <div class="loading" id="loadingIndicator">
-                    <div class="loading-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+                <div class="refresh-info">
+                    <div class="refresh-icon"></div>
+                    <span>Auto-refresh every 5 seconds</span>
                 </div>
-                
-                <button class="refresh-btn" id="refreshBtn">
-                    <i class="fas fa-sync-alt"></i> Refresh Status
-                </button>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>Server status is updated automatically every 30 seconds</p>
-            <div class="api-status">
-                <div class="api-dot"></div>
-                <span>API Connection: <span id="apiStatus">Connected</span></span>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
-            const timeDisplay = document.getElementById('timeDisplay');
-            const refreshBtn = document.getElementById('refreshBtn');
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            const apiStatus = document.getElementById('apiStatus');
-            const statusIndicator = document.getElementById('statusIndicator');
-            
-            const apiUrl = 'https://processor-annually-plenty-does.trycloudflare.com/status-server';
-            
-            const statusColors = {
-                'Online': '#2ecc71',
-                'Offline': '#e74c3c',
-                'Starting': '#f1c40f',
-                'Checking': '#3498db',
-                'Error': '#9b59b6'
-            };
-            
-            const statusMessages = {
-                'Online': 'Server is online',
-                'Offline': 'Server is offline',
-                'Starting': 'Server is starting',
-                'Checking': 'Checking server status',
-                'Error': 'Error connecting to server'
-            };
-            
-            let refreshInterval;
-            
-            function createParticles() {
-                const particlesContainer = document.getElementById('particles');
-                const particlesCount = 20;
-                
-                for (let i = 0; i < particlesCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.classList.add('particle');
-                    
-                    const size = Math.random() * 60 + 10;
-                    particle.style.width = `${size}px`;
-                    particle.style.height = `${size}px`;
-                    
-                    const posX = Math.random() * 100;
-                    const posY = Math.random() * 100;
-                    particle.style.left = `${posX}%`;
-                    particle.style.top = `${posY}%`;
-                    
-                    const delay = Math.random() * 15;
-                    particle.style.animationDelay = `${delay}s`;
-                    
-                    const hue = Math.random() * 60 + 160;
-                    particle.style.backgroundColor = `hsla(${hue}, 70%, 50%, 0.1)`;
-                    
-                    particlesContainer.appendChild(particle);
-                }
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const statusDesc = document.getElementById('statusDesc');
+        const timestamp = document.getElementById('timestamp');
+        const API_URL = 'https://processor-annually-plenty-does.trycloudflare.com/status-server';
+
+        const statusConfig = {
+            'Online': {
+                colorClass: 'status-online',
+                description: 'Server is online and ready for connections.',
+                pulseSpeed: '1.5s'
+            },
+            'Offline': {
+                colorClass: 'status-offline',
+                description: 'Server is currently offline or unreachable.',
+                pulseSpeed: '2s'
+            },
+            'Starting': {
+                colorClass: 'status-starting',
+                description: 'Server is starting up, please wait...',
+                pulseSpeed: '1s'
+            },
+            'Checking': {
+                colorClass: 'status-checking',
+                description: 'Checking server status...',
+                pulseSpeed: '1.8s'
+            },
+            'Error': {
+                colorClass: 'status-error',
+                description: 'An error occurred while checking server status.',
+                pulseSpeed: '2.5s'
             }
-            
-            function updateStatusDisplay(status, timestamp) {
-                const color = statusColors[status] || statusColors['Error'];
-                const message = statusMessages[status] || 'Unknown status';
+        };
+
+        async function fetchServerStatus() {
+            try {
+                const response = await fetch(API_URL);
                 
-                statusDot.style.backgroundColor = color;
-                statusDot.style.boxShadow = `0 0 20px ${color}`;
-                
-                statusDot.style.setProperty('--dot-color', color);
-                
-                const afterElement = window.getComputedStyle(statusDot, '::after');
-                statusDot.style.setProperty('--dot-color', color);
-                
-                statusText.textContent = status;
-                statusText.style.color = color;
-                
-                statusIndicator.style.borderLeft = `5px solid ${color}`;
-                
-                if (timestamp) {
-                    const date = new Date(timestamp);
-                    const formattedTime = date.toLocaleTimeString();
-                    const formattedDate = date.toLocaleDateString();
-                    timeDisplay.textContent = `${formattedDate} ${formattedTime}`;
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 
-                if (status === 'Online') {
-                    statusDot.style.animation = 'pulse 2s infinite';
-                } else if (status === 'Checking') {
-                    statusDot.style.animation = 'pulse 1.5s infinite';
-                } else if (status === 'Starting') {
-                    statusDot.style.animation = 'pulse 1.2s infinite';
-                } else {
-                    statusDot.style.animation = 'pulse 3s infinite';
-                }
-            }
-            
-            async function fetchServerStatus() {
-                try {
-                    loadingIndicator.style.display = 'block';
-                    apiStatus.textContent = 'Fetching...';
-                    apiStatus.style.color = '#3498db';
-                    
-                    const response = await fetch(apiUrl, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                        },
-                        mode: 'cors'
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    
-                    loadingIndicator.style.display = 'none';
-                    apiStatus.textContent = 'Connected';
-                    apiStatus.style.color = '#2ecc71';
-                    
-                    updateStatusDisplay(data.status, data.timestamp);
-                    
-                    return true;
-                } catch (error) {
-                    console.error('Error fetching server status:', error);
-                    
-                    loadingIndicator.style.display = 'none';
-                    apiStatus.textContent = 'Disconnected';
-                    apiStatus.style.color = '#e74c3c';
-                    
-                    updateStatusDisplay('Error', new Date().toISOString());
-                    
-                    return false;
-                }
-            }
-            
-            function refreshStatus() {
-                refreshBtn.classList.add('refreshing');
-                fetchServerStatus().then(() => {
-                    setTimeout(() => {
-                        refreshBtn.classList.remove('refreshing');
-                    }, 500);
+                const data = await response.json();
+                updateStatusDisplay(data);
+            } catch (error) {
+                console.error('Error fetching server status:', error);
+                updateStatusDisplay({
+                    status: 'Error',
+                    timestamp: new Date().toISOString(),
+                    error: error.message
                 });
             }
+        }
+
+        function updateStatusDisplay(data) {
+            const status = data.status || 'Error';
+            const config = statusConfig[status] || statusConfig['Error'];
             
-            function startAutoRefresh() {
-                if (refreshInterval) {
-                    clearInterval(refreshInterval);
-                }
-                
-                refreshInterval = setInterval(fetchServerStatus, 30000);
-            }
+            statusDot.className = 'status-dot';
+            statusText.className = 'status-text';
             
-            refreshBtn.addEventListener('click', refreshStatus);
+            statusDot.classList.add(config.colorClass);
+            statusText.classList.add(config.colorClass);
             
-            createParticles();
+            statusText.textContent = status;
+            statusDesc.textContent = config.description;
+            
+            const time = data.timestamp ? new Date(data.timestamp) : new Date();
+            timestamp.textContent = `Last updated: ${time.toLocaleTimeString()}`;
+            
+            statusDot.style.animationDuration = config.pulseSpeed;
+            
+            statusDot.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                statusDot.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        fetchServerStatus();
+        
+        setInterval(fetchServerStatus, 5000);
+        
+        document.querySelector('.status-container').addEventListener('click', () => {
             fetchServerStatus();
-            startAutoRefresh();
             
-            const style = document.createElement('style');
-            style.textContent = `
-                .status-dot::after {
-                    border: 2px solid var(--dot-color, #3498db);
-                }
-            `;
-            document.head.appendChild(style);
+            const container = document.querySelector('.status-container');
+            container.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                container.style.transform = '';
+            }, 300);
         });
     </script>
 </body>
